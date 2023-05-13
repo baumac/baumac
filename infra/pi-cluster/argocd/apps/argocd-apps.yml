@@ -8,19 +8,13 @@ spec:
     namespace: argocd
     name: in-cluster
   project: default
-  sources:
-    - repoURL: 'https://github.com/baumac/baumac'
-      path: apps/
-      targetRevision: HEAD
-      directory:
-        recurse: true
-        include: '*/deploy/*.yaml'
-    - repoURL: 'https://github.com/baumac/baumac'
-      path: infra/argocd/apps
-      targetRevision: HEAD
-      directory:
-        recurse: true
-        include: '*.yaml'
+  source:
+    repoURL: 'https://github.com/baumac/baumac'
+    path: ./
+    targetRevision: HEAD
+    directory:
+      recurse: true
+      include: '{apps/*/deploy/*.yaml,infra/pi-cluster/argocd/apps/*.yaml}'
   syncPolicy:
     automated:
       prune: true

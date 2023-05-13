@@ -5,7 +5,7 @@ metadata:
 spec:
   project: default
   source:
-    path: infra/argocd/apps/konnect-kong-proxies/
+    path: infra/pi-cluster/argocd/apps/konnect-kong-proxies/
     repoURL: 'https://github.com/baumac/baumac'
     targetRevision: HEAD
     helm:

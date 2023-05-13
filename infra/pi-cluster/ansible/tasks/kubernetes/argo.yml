@@ -11,42 +11,42 @@
     PATH: "~/go/bin:{{ ansible_env.PATH }}"
 
   tasks:
-    - name: Download Argo CD cli install script.
-      ansible.builtin.get_url:
-        url: https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-arm64
-        dest: "~/argocd-linux-arm64"
-        mode: a+x
-
-    - name: Install Argo CD cli on the control plane.
-      ansible.builtin.shell: >-
-        sudo install -m 555 ~/argocd-linux-arm64 /usr/local/bin/argocd
-
-    - name: Create the argocd k8s namespace
-      kubernetes.core.k8s:
-        name: argocd
-        api_version: v1
-        kind: Namespace
-        state: present
-
-    - name: Download argo-cd manifest to the cluster.
-      ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
-        dest: ~/argocd.yaml
-        mode: '0664'
-
-    - name: Apply argo-cd manifest to the cluster.
-      kubernetes.core.k8s:
-        namespace: argocd
-        state: present
-        src: ~/argocd.yaml
-
-    - name: Login using Argo CD cli
-      ansible.builtin.shell: >-
-        argocd login --core
+#    - name: Download Argo CD cli install script.
+#      ansible.builtin.get_url:
+#        url: https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-arm64
+#        dest: "~/argocd-linux-arm64"
+#        mode: a+x
+#
+#    - name: Install Argo CD cli on the control plane.
+#      ansible.builtin.shell: >-
+#        sudo install -m 555 ~/argocd-linux-arm64 /usr/local/bin/argocd
+#
+#    - name: Create the argocd k8s namespace
+#      kubernetes.core.k8s:
+#        name: argocd
+#        api_version: v1
+#        kind: Namespace
+#        state: present
+#
+#    - name: Download argo-cd manifest to the cluster.
+#      ansible.builtin.get_url:
+#        url: https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
+#        dest: ~/argocd.yaml
+#        mode: '0664'
+#
+#    - name: Apply argo-cd manifest to the cluster.
+#      kubernetes.core.k8s:
+#        namespace: argocd
+#        state: present
+#        src: ~/argocd.yaml
+#
+#    - name: Login using Argo CD cli
+#      ansible.builtin.shell: >-
+#        argocd login --core
 
     - name: Copy the argo-cd app of apps manifest to the cluster.
       ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../argocd/apps/argocd-apps.yml"
+        src: "{{ playbook_dir }}/../../../argocd/apps/argocd-apps.yml"
         dest: ~/argocd-apps.yml
 
     - name: Apply the argo-cd app of apps manifest to the cluster.

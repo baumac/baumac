@@ -1,4 +1,8 @@
 ---
-- name: Set up Argo CD.
+#- name: Configure Kong Konnect.
+#  import_playbook: tasks/kubernetes/kong.yml
+#  tags: ['kong']
+
+- name: Configure Argo CD.
   import_playbook: tasks/kubernetes/argo.yml
-  tags: ['argo'] 
+  tags: ['argo']

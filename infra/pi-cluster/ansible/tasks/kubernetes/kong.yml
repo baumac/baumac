@@ -11,6 +11,9 @@
     PATH: "~/go/bin:{{ ansible_env.PATH }}"
 
   tasks:
+    - name: Create the "konnect-kic" and "konnect-kong" namespaces
+      pause:
+        prompt: Please manually create the namespaces in the cluster! Press return to continue. Press Ctrl+c and then "a" to abort
     - name: Manually add the Kong Gateway certificates to the cluster.
       pause:
         prompt: Please manually add the Kong Gateway certificates to the cluster! Press return to continue. Press Ctrl+c and then "a" to abort
