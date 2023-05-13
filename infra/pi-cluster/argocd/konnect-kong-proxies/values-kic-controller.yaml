@@ -1,0 +1,24 @@
+kong:
+  deployment:
+    kong:
+      enabled: false
+
+  proxy:
+    nameOverride: konnect-kic-dps-kong-proxy
+
+  ingressController:
+    enabled: true
+    image:
+      repository: kong/kubernetes-ingress-controller
+      tag: 2.9.3
+
+    gatewayDiscovery:
+      enabled: true
+      adminApiService:
+        name: konnect-kic-dps-kong-admin
+
+    konnect:
+      enabled: true
+      tlsClientSecretName: konnect-client-tls
+      runtimeGroupID: "9ae47d21-11e2-494a-8cc7-731cd1f457ac"
+      apiHostname: "us.kic.api.konghq.com"

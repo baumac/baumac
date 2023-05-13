@@ -1,0 +1,22 @@
+---
+- name: Setup Kong Konnect.
+  hosts: control_plane
+  gather_facts: false
+  become: true
+
+  environment:
+    # The location of the kubeconfig file on the master.
+    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+    KUBERNETES_MASTER: ~/.kube/config
+    PATH: "~/go/bin:{{ ansible_env.PATH }}"
+
+  tasks:
+    - name: Manually add the Kong Gateway certificates to the cluster.
+      pause:
+        prompt: Please manually add the Kong Gateway certificates to the cluster! Press return to continue. Press Ctrl+c and then "a" to abort
+    - name: Manually add the Kong Ingress Controller certificates to the cluster.
+      pause:
+        prompt: Please manually add the Kong Ingress Controller certificates to the cluster! Press return to continue. Press Ctrl+c and then "a" to abort
+    - name: Update the values in konnect-kong-proxies.
+      pause:
+        prompt: Please manually update the configuration values in konnect-kong-proxies! Press return to continue. Press Ctrl+c and then "a" to abort

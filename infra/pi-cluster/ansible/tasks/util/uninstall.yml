@@ -1,0 +1,15 @@
+---
+- name: Uninstall K3s from the worker nodes.
+  hosts: nodes
+  become: true
+  tasks:
+    - name: Run K3s uninstall script on the nodes.
+      command: /usr/local/bin/k3s-agent-uninstall.sh
+
+- name: Uninstall K3s from the control plane.
+  hosts: control_plane
+  become: true
+  tasks:
+    - name: Run K3s uninstall script on the control plane.
+      command: /usr/local/bin/k3s-uninstall.sh
+

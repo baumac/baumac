@@ -1,0 +1,18 @@
+---
+- name: Shutdown the worker nodes.
+  hosts: nodes
+  become: true
+  tasks:
+    - name: Run K3s shutdown script.
+      command: k3s-killall.sh
+    - name: Shutdown the node.
+      command: shutdown -h
+
+- name: Shutdown the control plane.
+  hosts: control_plane
+  become: true
+  tasks:
+    - name: Run K3s shutdown script.
+      command: k3s-killall.sh
+    - name: Shutdown the control plane.
+      command: shutdown -h

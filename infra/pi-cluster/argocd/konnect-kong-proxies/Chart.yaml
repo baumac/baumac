@@ -1,0 +1,12 @@
+apiVersion: v2
+name: konnect-kong-proxies
+version: 2.17.0-rc.4
+appVersion: 3.2.0
+description: Kong chart wrapper with dependencies
+sources:
+  - https://github.com/kong/kong
+type: application
+dependencies:
+  - name: kong
+    version: 2.17.0-rc.4
+    repository: https://charts.konghq.com

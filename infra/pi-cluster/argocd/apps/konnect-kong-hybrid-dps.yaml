@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: konnect-kong
+spec:
+  project: default
+  source:
+    path: infra/argocd/apps/konnect-kong-proxies/
+    repoURL: 'https://github.com/baumac/baumac'
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+      - values-hybrid-dps.yaml
+  destination:
+    namespace: konnect-kong
+    name: in-cluster
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

@@ -1,0 +1,14 @@
+kong:
+  admin:
+    enabled: true
+    type: ClusterIP
+    clusterIP: None
+
+  image:
+    repository: kong/kong-gateway
+    tag: "3.2"
+
+  ingressController:
+    enabled: false
+
+  replicaCount: 1
