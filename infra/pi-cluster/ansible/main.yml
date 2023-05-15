@@ -54,7 +54,7 @@
         mode: a+x
     - name: Install K3s on control plane (takes a while).
       ansible.builtin.shell: >-
-        K3S_KUBECONFIG_MODE="644"
+        INSTALL_K3S_EXEC="--disable=traefik" K3S_KUBECONFIG_MODE="644" 
         ~/k3s_install.sh >> ~/k3s_install_log.txt
       args:
         chdir: "~"
