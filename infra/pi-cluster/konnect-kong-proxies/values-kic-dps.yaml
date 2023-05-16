@@ -1,3 +1,4 @@
+---
 kong:
   admin:
     enabled: true

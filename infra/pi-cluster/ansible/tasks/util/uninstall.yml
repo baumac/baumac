@@ -12,4 +12,3 @@
   tasks:
     - name: Run K3s uninstall script on the control plane.
       command: /usr/local/bin/k3s-uninstall.sh
-

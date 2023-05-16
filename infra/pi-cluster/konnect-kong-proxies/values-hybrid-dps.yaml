@@ -1,3 +1,4 @@
+---
 kong:
   image:
     repository: kong/kong-gateway

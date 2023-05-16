@@ -14,9 +14,9 @@
         path: /boot/config.txt
         block: |
           # PoE Hat Fan Speeds
-          dtoverlay=rpi-poe   
-          dtparam=poe_fan_temp0=50000   
-          dtparam=poe_fan_temp0_hyst=1000   
+          dtoverlay=rpi-poe
+          dtparam=poe_fan_temp0=50000
+          dtparam=poe_fan_temp0_hyst=1000
           dtparam=poe_fan_temp1=60000
           dtparam=poe_fan_temp1_hyst=2500
           dtparam=poe_fan_temp2=70000
@@ -54,7 +54,7 @@
         mode: a+x
     - name: Install K3s on control plane (takes a while).
       ansible.builtin.shell: >-
-        INSTALL_K3S_EXEC="--disable=traefik" K3S_KUBECONFIG_MODE="644" 
+        INSTALL_K3S_EXEC="--disable=traefik" K3S_KUBECONFIG_MODE="644"
         ~/k3s_install.sh >> ~/k3s_install_log.txt
       args:
         chdir: "~"
@@ -99,7 +99,7 @@
   become: true
 
   tasks:
-    - name: Install K3s on nodes (takes a while). #In the K3s URL we have to use the control plane IP or the K3s agent fails to start
+    - name: Install K3s on nodes (takes a while).  # In the K3s URL we have to use the control plane IP or the K3s agent fails to start
       ansible.builtin.shell: >-
         K3S_URL="{{ hostvars[groups['control_plane'][0]]['k3s_url'] }}"
         K3S_TOKEN="{{ hostvars[groups['control_plane'][0]]['node_token'] }}"
