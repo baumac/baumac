@@ -7,5 +7,4 @@ rules:
   truthy: false
 
 ignore: |
-  **/.github/workflows/ci.yml
-  **/stale.yml
+  **/.github/workflows/*
