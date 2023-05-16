@@ -1,5 +1,5 @@
 ---
-name: Lint YAML files
+name: Lint files
 'on':
   pull_request:
   push:
@@ -9,7 +9,7 @@ name: Lint YAML files
 jobs:
 
   lint:
-    name: Lint
+    name: Lint YAML
     runs-on: ubuntu-latest
 
     steps:
