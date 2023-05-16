@@ -11,7 +11,7 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-      - values-hybrid-dps.yaml
+        - values-hybrid-dps.yaml
   destination:
     namespace: konnect-kong
     name: in-cluster
@@ -20,4 +20,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true

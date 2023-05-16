@@ -11,7 +11,7 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-      - values-kic-dps.yaml
+        - values-kic-dps.yaml
   destination:
     namespace: konnect-kic
     name: in-cluster
@@ -20,4 +20,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true

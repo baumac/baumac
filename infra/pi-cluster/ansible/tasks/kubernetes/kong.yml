@@ -26,15 +26,15 @@
     - name: Manually add the Kong Ingress Controller certificates to the cluster.
       pause:
         prompt: |
-          Please manually add the Kong Ingress Controller certificates to the cluster by running 
-          'kubectl create secret tls konnect-client-tls -n konnect-kic --cert=kic_tls.crt --key=kic_tls.key'! 
-          Press return to continue. Press Ctrl+c and then "a" to abort
+          Please manually add the Kong Ingress Controller certificates to the cluster by running
+           'kubectl create secret tls konnect-client-tls -n konnect-kic --cert=kic_tls.crt --key=kic_tls.key'!
+           Press return to continue. Press Ctrl+c and then "a" to abort
     - name: Manually add the Kong Gateway certificates to the cluster.
       pause:
         prompt: |
-          Please manually add the Kong Gateway certificates to the cluster by running 
-          'kubectl create secret tls kong-cluster-cert -n konnect-kong --cert=gateway_tls.crt --key=gateway_tls.key'! 
-          Press return to continue. Press Ctrl+c and then "a" to abort
+          Please manually add the Kong Gateway certificates to the cluster by running
+           'kubectl create secret tls kong-cluster-cert -n konnect-kong --cert=gateway_tls.crt --key=gateway_tls.key'!
+           Press return to continue. Press Ctrl+c and then "a" to abort
     - name: Update the values in konnect-kong-proxies.
       pause:
         prompt: |
