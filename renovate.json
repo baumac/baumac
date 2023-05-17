@@ -22,10 +22,10 @@
   "rangeStrategy": "bump",
   "stabilityDays": 14,
   "automergeSchedule": [
-    "after 5am", "before 5pm", "on monday and tuesday and wednesday and thursday"
+    "after 5am on Monday"
   ],
   "schedule": [
-    "before 5am every weekday"
+    "before 5am on Monday"
   ],
   "timezone": "America/New_York"
 }
