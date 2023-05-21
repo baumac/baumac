@@ -1,0 +1,72 @@
+---
+- name: Configure the database host.
+  hosts: database_host
+  gather_facts: false
+  become: true
+
+  handlers:
+    - name: reboot-pi
+      ansible.builtin.reboot:
+
+  tasks:
+    - name: Set quieter PoE Hat fan profiles.
+      ansible.builtin.blockinfile:
+        path: /boot/config.txt
+        block: |
+          # PoE Hat Fan Speeds
+          dtoverlay=rpi-poe
+          dtparam=poe_fan_temp0=50000
+          dtparam=poe_fan_temp0_hyst=1000
+          dtparam=poe_fan_temp1=60000
+          dtparam=poe_fan_temp1_hyst=2500
+          dtparam=poe_fan_temp2=70000
+          dtparam=poe_fan_temp2_hyst=5000
+          dtparam=poe_fan_temp3=80000
+          dtparam=poe_fan_temp3_hyst=5000
+      notify: reboot-pi
+
+    - name: Ensure cgroups are configured correctly in cmdline.txt.
+      ansible.builtin.replace:
+        path: /boot/cmdline.txt
+        regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
+        replace: '\1 {{ item }}'
+      with_items:
+        - "cgroup_memory=1"
+        - "cgroup_enable=memory"
+      notify: reboot-pi
+
+    - name:
+
+- name: Configure PSQL on the database host.
+  hosts: database_host
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Install PostgreSQL.
+      ansible.builtin.package:
+        name:
+          - postgresql
+        state: present
+        update_cache: true
+      become: true
+
+    - name: Create 'pi' database user
+      become: yes
+      become_user: postgres
+      ansible.builtin.expect:
+        command: createuser pi --pwprompt --superuser --createdb --replication
+        responses:
+          'Enter password for new role:' : 'pi'
+          'Enter it again:' : 'pi'
+    - name: Get service facts
+      ansible.builtin.service_facts:
+
+    - name: Verify PostgreSQL service is running
+      ansible.builtin.fail:
+        msg: PostgreSQL is not present, why? It should have been there!
+      when: ansible_facts.services["postgresql.service"] is not defined
+
+
+
+
