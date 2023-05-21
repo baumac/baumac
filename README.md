@@ -19,6 +19,8 @@ Below you can find some of the various things I've developed.
 
 # Infra
 [![Pi Cluster CI](https://github.com/baumac/baumac/actions/workflows/pi-cluster.yaml/badge.svg)](https://github.com/baumac/baumac/actions/workflows/pi-cluster.yaml)
+[![Postgres Database CI](https://github.com/baumac/baumac/actions/workflows/psql-database.yaml/badge.svg)](https://github.com/baumac/baumac/actions/workflows/psql-database.yaml)
+
 <table>
     <tr>
         <th>Logo</th>
@@ -30,4 +32,9 @@ Below you can find some of the various things I've developed.
         <td><a href="https://github.com/baumac/baumac/blob/main/infra/pi-cluster/README.md">Pi Cluster</a></td>
         <td>K8s cluster for self-hosting projects</td>
     </tr>
+    <tr>
+        <td><img alt="PostgreSQL logo" width="32" src="https://wiki.postgresql.org/images/a/a4/PostgreSQL_logo.3colors.svg"></td>
+        <td><a href="https://github.com/baumac/baumac/blob/main/infra/psql-database/README.md">Postgres Database</a></td>
+        <td>PSQL db hosted on a Raspberry Pi</td>
+    </tr> 
 </table>

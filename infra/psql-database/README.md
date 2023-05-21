@@ -1,6 +1,6 @@
 # PostgreSQL Database
 
-A PostgreSQL database instance that runs on a Raspberry Pi.
+A PostgreSQL database that is hosted on a Raspberry Pi.
 
 ## Table of Contents
 
