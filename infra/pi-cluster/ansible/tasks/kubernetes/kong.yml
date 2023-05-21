@@ -11,12 +11,32 @@
     PATH: "~/go/bin:{{ ansible_env.PATH }}"
 
   tasks:
-    - name: Manually add the Kong Gateway certificates to the cluster.
-      pause:
-        prompt: Please manually add the Kong Gateway certificates to the cluster! Press return to continue. Press Ctrl+c and then "a" to abort
+    - name: Create "konnect-kic" k8s namespace
+      kubernetes.core.k8s:
+        name: konnect-kic
+        api_version: v1
+        kind: Namespace
+        state: present
+    - name: Create "konnect-kong" k8s namespace
+      kubernetes.core.k8s:
+        name: konnect-kong
+        api_version: v1
+        kind: Namespace
+        state: present
     - name: Manually add the Kong Ingress Controller certificates to the cluster.
       pause:
-        prompt: Please manually add the Kong Ingress Controller certificates to the cluster! Press return to continue. Press Ctrl+c and then "a" to abort
+        prompt: |
+          Please manually add the Kong Ingress Controller certificates to the cluster by running
+           'kubectl create secret tls konnect-client-tls -n konnect-kic --cert=kic_tls.crt --key=kic_tls.key'!
+           Press return to continue. Press Ctrl+c and then "a" to abort
+    - name: Manually add the Kong Gateway certificates to the cluster.
+      pause:
+        prompt: |
+          Please manually add the Kong Gateway certificates to the cluster by running
+           'kubectl create secret tls kong-cluster-cert -n konnect-kong --cert=gateway_tls.crt --key=gateway_tls.key'!
+           Press return to continue. Press Ctrl+c and then "a" to abort
     - name: Update the values in konnect-kong-proxies.
       pause:
-        prompt: Please manually update the configuration values in konnect-kong-proxies! Press return to continue. Press Ctrl+c and then "a" to abort
+        prompt: |
+            Please manually update the configuration values in konnect-kong-proxies!
+            Press return to continue. Press Ctrl+c and then "a" to abort

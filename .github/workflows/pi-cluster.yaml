@@ -1,28 +1,28 @@
 ---
-name: CI
+name: Pi Cluster CI
 'on':
   pull_request:
   push:
     branches:
-      - master
+      - main
 
 jobs:
 
-  lint:
-    name: Lint
+  lint-yaml:
+    name: Lint all of the Pi-Cluster YAML files.
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python 3.
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
       - name: Install test dependencies.
         run: pip3 install yamllint
 
-      - name: Lint all the YAMLs.
-        run: yamllint .
+      - name: Lint all of the infra YAML files
+        run: cd ./infra/pi-cluster && yamllint .

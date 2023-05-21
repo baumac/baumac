@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":semanticCommits",
+    ":automergeRequireAllStatusChecks"
+  ],
+  "labels": [
+    "renovate-bot"
+  ],
+  "packageRules": [
+    {
+      "groupName": "all non-major dependencies with stable version",
+      "groupSlug": "all-minor-patch",
+      "matchCurrentVersion": "!/^0/",
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["minor", "patch"]
+    }
+  ],
+  "automerge": true,
+  "platformAutomerge": true,
+  "rangeStrategy": "bump",
+  "stabilityDays": 14,
+  "automergeSchedule": [
+    "after 5am on Monday"
+  ],
+  "schedule": [
+    "before 5am on Monday"
+  ],
+  "timezone": "America/New_York"
+}

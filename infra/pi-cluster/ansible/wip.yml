@@ -1,4 +1,0 @@
----
-- name: Set up Argo CD.
-  import_playbook: tasks/kubernetes/argo.yml
-  tags: ['argo'] 

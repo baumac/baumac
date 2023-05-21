@@ -1,4 +1,4 @@
-# argocd-apps.yml
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -8,22 +8,16 @@ spec:
     namespace: argocd
     name: in-cluster
   project: default
-  sources:
-    - repoURL: 'https://github.com/baumac/baumac'
-      path: apps/
-      targetRevision: HEAD
-      directory:
-        recurse: true
-        include: '*/deploy/*.yaml'
-    - repoURL: 'https://github.com/baumac/baumac'
-      path: infra/argocd/apps
-      targetRevision: HEAD
-      directory:
-        recurse: true
-        include: '*.yaml'
+  source:
+    repoURL: 'https://github.com/baumac/baumac'
+    path: ./
+    targetRevision: HEAD
+    directory:
+      recurse: true
+      include: '{apps/*/deploy/argocd-app.yaml,infra/pi-cluster/argocd/apps/*.yaml}'
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true

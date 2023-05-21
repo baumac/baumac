@@ -1,3 +1,4 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -5,12 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    path: infra/argocd/apps/konnect-kong-proxies/
+    path: infra/pi-cluster/konnect-kong-proxies/
     repoURL: 'https://github.com/baumac/baumac'
     targetRevision: HEAD
     helm:
       valueFiles:
-      - values-kic-dps.yaml
+        - values-kic-dps.yaml
   destination:
     namespace: konnect-kic
     name: in-cluster
@@ -19,4 +20,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true

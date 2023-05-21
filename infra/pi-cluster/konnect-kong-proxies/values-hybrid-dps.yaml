@@ -1,10 +1,11 @@
+---
 kong:
   image:
     repository: kong/kong-gateway
     tag: "3.2"
 
   secretVolumes:
-  - kong-cluster-cert
+    - kong-cluster-cert
 
   admin:
     enabled: false
