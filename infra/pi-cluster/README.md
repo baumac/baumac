@@ -121,10 +121,11 @@ Note: when prompted, make sure to add the required Konnect certificates as a sec
 ## Management & Maintenance
 
 ### Cluster Management
-After the cluster has been provisioned, 
-To verify ssh into node1.local and running `curl -i localhost:80`.
-You can also log into node 1, switch to the root user account (`sudo su`), then use `kubectl` to manage the cluster (e.g. view Drupal pods with `kubectl get pods -n drupal`).
-The K3s' `kubeconfig` file is located at `/etc/rancher/k3s/k3s.yaml`. If you'd like to manage the cluster from other hosts (or using a tool like Lens), copy the contents of that file, replacing `localhost` with the IP address or hostname of the control plane node, and paste the contents into a file `~/.kube/config`.
+After the cluster has been provisioned, you can...
+- Verify the cluster is reachable `curl -i node1.local:80`.
+- Use `kubectl` to manage the cluster (e.g. view all pods with `kubectl get pods --all-namespaces`).
+
+Note: The K3s' `kubeconfig` file is located at `/etc/rancher/k3s/k3s.yaml`. If you'd like to manage the cluster from other hosts (or using a tool like Lens), copy the contents of that file, replacing `localhost` with the IP address or hostname of the control plane node, and paste the contents into a file `~/.kube/config`.
 
 ### Cluster Maintenance
 
