@@ -57,8 +57,8 @@
       ansible.builtin.expect:
         command: createuser pi --pwprompt --superuser --createdb --replication
         responses:
-          'Enter password for new role:' : 'pi'
-          'Enter it again:' : 'pi'
+          'Enter password for new role:': 'pi'
+          'Enter it again:': 'pi'
     - name: Get service facts
       ansible.builtin.service_facts:
 
@@ -66,7 +66,3 @@
       ansible.builtin.fail:
         msg: PostgreSQL is not present, why? It should have been there!
       when: ansible_facts.services["postgresql.service"] is not defined
-
-
-
-
