@@ -12,6 +12,7 @@ A PostgreSQL database that is hosted on a Raspberry Pi.
     * [Raspberry Pi Configuration](#raspberry-pi-configuration)
     * [Development PC Configuration](#development-pc-configuration)
     * [Database Configuration](#database-configuration)
+    * [Post Provisioning](#post-provisioning)
   * [Miscellaneous](#miscellaneous)
     * [Parts List](#parts-list)
 <!-- TOC -->
@@ -72,6 +73,10 @@ After all prerequisites have been completed, use your Development PC to run the 
 ```
 ansible-playbook ./ansible/main.yml
 ```
+
+### Post Provisioning
+
+A PSQL database is now reachable at 'psql.local' using the user 'pi' with password 'pi'.
 
 ## Miscellaneous 
 
