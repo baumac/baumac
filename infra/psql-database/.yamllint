@@ -1,0 +1,12 @@
+---
+extends: default
+rules:
+  indentation:
+    spaces: 2
+  line-length:
+    max: 140
+    level: warning
+  truthy: false
+
+ignore: |
+  **/.github/workflows/*
