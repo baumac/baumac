@@ -35,12 +35,39 @@
         - "cgroup_enable=memory"
       notify: reboot-pi
 
-    - name:
+    - name: Ensure required dependencies are installed.
+      ansible.builtin.package:
+        name:
+          - python3-pip
+          - python3-setuptools
+          - build-essential
+          - golang
+          - git
+          - acl
+        state: present
+        update_cache: true
+      become: true
+
+    - name: Ensure required Python libraries are installed.
+      ansible.builtin.pip:
+        name:
+          - openshift
+          - pyyaml
+          - pexpect
+        state: present
+      become: true
 
 - name: Configure PSQL on the database host.
   hosts: database_host
   gather_facts: true
   become: true
+
+  handlers:
+    - name: restart-postgres
+      ansible.builtin.service:
+        name: postgresql
+        state: restarted
+      become: true
 
   tasks:
     - name: Install PostgreSQL.
@@ -50,6 +77,22 @@
         state: present
         update_cache: true
       become: true
+
+    - name: Ensure Postgres is configured to listen to all ip addresses
+      ansible.builtin.lineinfile:
+        path: /etc/postgresql/13/main/postgresql.conf
+        line: listen_addresses = '*'
+        create: yes
+      become: true
+      notify: restart-postgres
+
+    - name: Ensure Postgres is configured to allow connections from the same network
+      ansible.builtin.lineinfile:
+        path: /etc/postgresql/13/main/pg_hba.conf
+        line: host     all             all            samenet              md5
+        create: yes
+      become: true
+      notify: restart-postgres
 
     - name: Create 'pi' database user
       become: yes

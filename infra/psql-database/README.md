@@ -76,7 +76,11 @@ ansible-playbook ./ansible/main.yml
 
 ### Post Provisioning
 
-A PSQL database is now reachable at 'psql.local' using the user 'pi' with password 'pi'.
+A PSQL database is now reachable at 'psql.local' using the user 'pi' with password 'pi'. i.e
+
+```
+psql -h psql.local -U pi -d postgres
+```
 
 ## Miscellaneous 
 
