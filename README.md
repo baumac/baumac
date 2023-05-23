@@ -30,7 +30,7 @@ Below you can find some of the various things I've developed.
     <tr>
         <td><img alt="Raspberry Pi" width="32" src="https://www.raspberrypi.com/app/uploads/2021/10/cropped-Raspberry-Pi-Favicon-100x100-1-300x300.png"></td>
         <td><a href="https://github.com/baumac/baumac/blob/main/infra/pi-cluster/README.md">Pi Cluster</a></td>
-        <td>K8s cluster for self-hosting projects</td>
+        <td>K8s cluster of Raspberry Pis</td>
     </tr>
     <tr>
         <td><img alt="PostgreSQL logo" width="32" src="https://wiki.postgresql.org/images/a/a4/PostgreSQL_logo.3colors.svg"></td>
