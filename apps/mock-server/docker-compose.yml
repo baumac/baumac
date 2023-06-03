@@ -1,9 +1,24 @@
-# Use postgres/example user/password credentials
-version: '3.1'
+version: '3.9'
 
 services:
-  db:
-    image: postgres
+  app:
+    build:
+      context: .
+      target: local-dev
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mock_server
+
+    command: pnpm start
+  postgres:
+    image: postgres:15.3
     restart: always
     environment:
       POSTGRES_USER: postgres
