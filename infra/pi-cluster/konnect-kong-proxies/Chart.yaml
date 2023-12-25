@@ -9,5 +9,5 @@ sources:
 type: application
 dependencies:
   - name: kong
-    version: 2.32.0
+    version: 2.33.1
     repository: https://charts.konghq.com
