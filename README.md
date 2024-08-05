@@ -12,8 +12,8 @@ Below you can find some of the various things I've developed.
     </tr>
     <tr>
         <td><img alt="Traffic Cone" width="32" src="https://upload.wikimedia.org/wikipedia/commons/e/e6/VLC_Icon.svg"></td>
-        <td><a href="https://github.com/baumac/baumac/blob/main/">Coming Soon...</a></td>
-        <td>Coming soon...</td>
+        <td><a href="https://github.com/baumac/baumac/blob/main/">TBD</a></td>
+        <td>TBD</td>
     </tr>
 </table>
 
