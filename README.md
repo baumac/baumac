@@ -38,3 +38,18 @@ Below you can find some of the various things I've developed.
         <td>PSQL db hosted on a Raspberry Pi</td>
     </tr> 
 </table>
+
+# Experiments
+
+<table>
+    <tr>
+        <th>Logo</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><img alt="Traffic Cone" width="32" src="https://upload.wikimedia.org/wikipedia/commons/e/e6/VLC_Icon.svg"></td>
+        <td><a href="https://github.com/baumac/baumac/blob/main/experiments">Event Outbox POC</a></td>
+        <td>A docker compose setup for trialing postgres + debezium's event outbox router + confluent schema registry + kafka</td>
+    </tr>
+</table>
