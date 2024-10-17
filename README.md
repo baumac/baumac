@@ -17,6 +17,21 @@ Below you can find some of the various things I've developed.
     </tr>
 </table>
 
+# Experiments
+
+<table>
+    <tr>
+        <th>Logo</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><img alt="Event Outbox" width="32" src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Email_Logo_PNG.png"></td>
+        <td><a href="https://github.com/baumac/baumac/blob/main/experiments">Event Outbox with Schema Registry</a></td>
+        <td>Docker compose setup for trialing Postgres and the Debezium event outbox router with the Confluent schema registry and Kafka.</td>
+    </tr>
+</table>
+
 # Infra
 [![Pi Cluster CI](https://github.com/baumac/baumac/actions/workflows/pi-cluster.yaml/badge.svg)](https://github.com/baumac/baumac/actions/workflows/pi-cluster.yaml)
 [![Postgres Database CI](https://github.com/baumac/baumac/actions/workflows/psql-database.yaml/badge.svg)](https://github.com/baumac/baumac/actions/workflows/psql-database.yaml)
