@@ -12,10 +12,10 @@ services:
       timeout: 10s
 
   zookeeper:
-    image: debezium/zookeeper:2.4
+    image: debezium/zookeeper:2.6
 
   kafka:
-    image: debezium/kafka:2.4
+    image: debezium/kafka:2.6
     depends_on:
       - zookeeper
     environment:
