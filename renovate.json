@@ -22,6 +22,7 @@
       ]
     }
   ],
+  "ignorePaths": ["experiments/**"],
   "automerge": true,
   "platformAutomerge": true,
   "rangeStrategy": "bump",
