@@ -1,6 +1,6 @@
 services:
   db:
-    image: debezium/postgres:15-alpine
+    image: debezium/postgres:17-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
