@@ -1,0 +1,454 @@
+openapi: 3.1.0
+info:
+  description: V1 of Reviews service.
+  version: 1.0.0
+  title: reviews API
+servers:
+  - url: https://baumac.dev/reviews/v1
+    description: Base URL for the Reviews service
+security:
+  - bearerAuth: []
+paths:
+  /users:
+    post:
+      summary: Create a user.
+      operationId: create-user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Users
+  /users/{id}:
+    get:
+      summary: Retrieve a user by ID.
+      operationId: retrieve-user
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the user to retrieve.
+      responses:
+        '200':
+          $ref: '#/components/responses/RetrieveUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Users
+    patch:
+      summary: Patch updatable properties of a user.
+      operationId: patch-user
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the user to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchUserRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/PatchUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Users
+    delete:
+      summary: Delete a user by ID.
+      operationId: delete-user
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the user to delete.
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Users
+  /auth/login:
+    post:
+      summary: Login a user.
+      operationId: login-user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/LoginUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - Auth
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Page:
+      name: page
+      description: Determines which page of a collection API to retrieve.
+      required: false
+      in: query
+      schema:
+        $ref: '#/components/schemas/PageParameters'
+    UsersFilter:
+      name: filter
+      description: Filters supported for users.
+      required: false
+      in: query
+      schema:
+        $ref: '#/components/schemas/UsersFilterParameters'
+  schemas:
+    Error:
+      title: Error
+      description: Error schema.
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          required: true
+          enum: [ 400, 401, 403, 404, 409 ]
+          example: 404
+          description: The HTTP status code.
+        message:
+          type: string
+          required: true
+          description: Details about the error response.
+          example: Forbidden.
+    PaginatedMeta:
+      type: object
+      title: PaginatedMeta
+      description: Returns pagination information
+      properties:
+        page:
+          type: object
+          description: Contains pagination query parameters and the total number of objects returned.
+          properties:
+            number:
+              type: integer
+              required: true
+              example: 2
+              description: Specifies the number of objects returned per page.
+            size:
+              type: integer
+              required: true
+              example: 10
+              maximum: 100
+              description: Specifies the size of the page.
+            total:
+              type: integer
+              required: true
+              maximum: 1000
+              example: 100
+              description: Integer representation of the amount of items returned.
+    PageParameters:
+      title: 'PageParameters'
+      type: object
+      additionalProperties: false
+      properties:
+        size:
+          type: integer
+          description: The number of items included per page.
+          example: 10
+        number:
+          type: integer
+          description: The specific page number of the collection results.
+          example: 2
+    StringFieldFilter:
+      title: 'StringFieldFilter'
+      oneOf:
+        - $ref: '#/components/schemas/StringFieldEqualsFilter'
+        - $ref: '#/components/schemas/StringFieldContainsFilter'
+        - $ref: '#/components/schemas/StringFieldNotEqualsFilter'
+        - $ref: '#/components/schemas/StringFieldOrEqualityFilter'
+        - $ref: '#/components/schemas/StringFieldOrContainsFilter'
+    StringFieldContainsFilter:
+      x-examples:
+        example-1:
+          contains: 'some-value'
+      type: object
+      title: StringFieldContainsFilter
+      description: Filter a string value field by partial contains.
+      properties:
+        contains:
+          type: string
+          required: true
+    StringFieldEqualsFilter:
+      x-examples:
+        example-1: 'equals-some-value'
+        example-2:
+          eq: 'some-value'
+      title: StringFieldEqualsFilter
+      description: Filter a string value field by exact match.
+      oneOf:
+        - type: string
+        - type: object
+          title: StringFieldEqualsComparison
+          properties:
+            eq:
+              type: string
+              required: true
+    StringFieldNotEqualsFilter:
+      x-examples:
+        example-1:
+          neq: 'some-value'
+      title: StringFieldNotEqualsFilter
+      description: Filter a string value field by inequality match.
+      type: object
+      properties:
+        neq:
+          type: string
+          required: true
+    StringFieldOrEqualityFilter:
+      x-examples:
+        example-1:
+          oeq: 'some-value,other-value'
+      title: StringFieldOrEqualityFilter
+      description: |
+        Filter a string value field by determining if the value is equal to any in a set of values, where the set is a
+        comma-delimited list.
+      type: object
+      properties:
+        oeq:
+          type: string
+          required: true
+    StringFieldOrContainsFilter:
+      x-examples:
+        example-1:
+          ocontains: 'some-value,other-value'
+      title: StringFieldOrContainsFilter
+      description: |
+        Filter a string value field by determining if the value partially matches any in a set of values, where the set
+        is a comma-delimited list.
+      type: object
+      properties:
+        ocontains:
+          type: string
+          required: true
+    EnumFieldFilter:
+      title: 'EnumFieldFilter'
+      oneOf:
+        - $ref: '#/components/schemas/StringFieldEqualsFilter'
+        - $ref: '#/components/schemas/StringFieldNotEqualsFilter'
+        - $ref: '#/components/schemas/StringFieldOrEqualityFilter'
+    UsersFilterParameters:
+      title: 'UsersFilterParameters'
+      type: object
+      additionalProperties: false
+      properties:
+        user:
+          $ref: '#/components/schemas/StringFieldFilter'
+    User:
+      title: User
+      description: User schema.
+      type: object
+      properties:
+        id:
+          type: string
+          required: true
+          format: uuid
+          description: ID of the user.
+          readOnly: true
+        username:
+          type: string
+          required: true
+          description: Username of the user.
+        email:
+          type: string
+          required: true
+          description: Email of the user.
+        first_name:
+          type: string
+          description: First name of the user.
+        last_name:
+          type: string
+          description: First name of the user.
+        role:
+          required: true
+          $ref: '#/components/schemas/UserRoleName'
+    UserRoleName:
+      description: Name of the user role.
+      type: string
+      enum:
+        - admin
+        - user
+    LoginUserRequest:
+      title: 'LoginUserRequest'
+      description: Request schema for logging in a user.
+      type: object
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+          required: true
+          description: Username of the user.
+        password:
+          type: string
+          required: true
+          description: Password of the user.
+    CreateUserRequest:
+      title: 'CreateUserRequest'
+      description: Request schema for creating a user.
+      type: object
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+          required: true
+          description: Username of the user.
+        email:
+          type: string
+          required: true
+          description: Email of the user.
+        password:
+          type: string
+          required: true
+          description: Password of the user
+        first_name:
+          type: string
+          description: First name of the user.
+        last_name:
+          type: string
+          description: Last name of the user.
+    PatchUserRequest:
+      title: 'PatchUserRequest'
+      description: Request schema for patching updatable fields of a user.
+      type: object
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+          description: Username of the user.
+        email:
+          type: string
+          description: Email of the user.
+        password:
+          type: string
+          description: Password of the user
+        first_name:
+          type: string
+          description: First name of the user.
+        last_name:
+          type: string
+          description: First name of the user.
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthenticated:
+      description: Unauthenticated
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    LoginUserResponse:
+      description: Response format for user login.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+                description: JWT access token scoped to a user.
+    RetrieveUserResponse:
+      description: Response format for retrieving a user.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    CreateUserResponse:
+      description: Response format for creating user.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    PatchUserResponse:
+      description: Response format for updating user.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'

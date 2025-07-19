@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: bitnami/postgresql:17
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: 'reviews'
+  db-migrations:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    command: "./node_modules/.bin/typeorm --dataSource dist/src/migrations/dataSource/dataSource.js migration:run"
+    env_file:
+      - ".env"
+  app:
+    build: .
+    depends_on:
+      db-migrations:
+        condition: service_completed_successfully
+    ports:
+      - "3000:3000"
+    command: "node dist/src/cmd/api/main.js"
+    env_file:
+      - ".env"
