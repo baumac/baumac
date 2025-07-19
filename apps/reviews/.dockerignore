@@ -1,0 +1,43 @@
+**/node_modules
+**/dist
+**/tmp
+.github
+docs
+.git
+.dockerignore
+README.md
+.eslintignore
+.eslintrc
+.gitignore
+CONTRIBUTING.md
+jest.config.*.js
+jest.environment.*.js
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+junit.xml
+*-junit.xml
+test-output-*.xml
+test
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode
