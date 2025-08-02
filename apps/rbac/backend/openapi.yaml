@@ -1,0 +1,902 @@
+openapi: 3.1.0
+info:
+  description: V1 of RBAC service.
+  version: 1.0.0
+  title: RBAC API
+servers:
+  - url: https://baumac.dev/api/v1
+    description: Base URL for the RBAC service
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: Login a user.
+      operationId: login-user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/LoginUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - Auth
+  /auth/refresh:
+    post:
+      summary: Refresh the user's access token.
+      operationId: refresh-user
+      responses:
+        '200':
+          $ref: '#/components/responses/LoginUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - Auth
+  /auth/check:
+    get:
+      summary: Check if the user has a permission.
+      operationId: check-user
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: permission
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthCheckResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - Auth
+  /users:
+    get:
+        summary: Get a list of users.
+        operationId: list-users
+        parameters:
+            - $ref: '#/components/parameters/Page'
+        responses:
+            '200':
+             $ref: '#/components/responses/ListUsersResponse'
+        tags:
+            - Users
+    post:
+      summary: Create a user.
+      operationId: create-user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Users
+  /users/{id}:
+    get:
+      summary: Get a user by ID.
+      operationId: get-user
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the user to get.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Users
+    patch:
+      summary: Patch updatable properties of a user.
+      operationId: patch-user
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the user to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchUserRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/PatchUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Users
+    delete:
+      summary: Delete a user by ID.
+      operationId: delete-user
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the user to delete.
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Users
+  /users/{id}/roles:
+    post:
+      summary: Assign roles to a user.
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the user to assign roles to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignRolesRequest'
+      responses:
+        '204':
+          description: Roles assigned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - Users
+  /users/{id}/roles/{role}:
+    delete:
+      summary: Delete a role from a user.
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the user to delete the role from.
+        - schema:
+            type: string
+          name: role
+          in: path
+          required: true
+          description: |
+            The role to delete from the user.
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - Users
+  /roles:
+    get:
+      summary: Get a list of roles.
+      operationId: list-roles
+      parameters:
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListRolesResponse'
+      tags:
+        - Roles
+    post:
+      summary: Create a new role
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateRoleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Roles
+  /roles/{id}:
+    get:
+      summary: Get a role by ID.
+      operationId: get-role
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the role to get.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRoleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Roles
+    patch:
+      summary: Patch updatable properties of a role.
+      operationId: patch-role
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the role to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchRoleRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/PatchRoleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Roles
+    delete:
+      summary: Delete a role by ID.
+      operationId: delete-role
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the role to delete.
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Roles
+  /permissions:
+    get:
+      summary: Get a list of permissions.
+      operationId: list-permissions
+      parameters:
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListPermissionsResponse'
+      tags:
+        - Permissions
+    post:
+      summary: Create a new permission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePermissionRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreatePermissionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Permissions
+  /permissions/{id}:
+    get:
+      summary: Get a permission by ID.
+      operationId: get-permission
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the role to get.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetPermissionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Permissions
+    patch:
+      summary: Patch updatable properties of a permission.
+      operationId: patch-permission
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the permission to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchPermissionRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/PatchPermissionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Permissions
+    delete:
+      summary: Delete a permission by ID.
+      operationId: delete-permission
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+            example: bcd7681a-45fb-4171-b4ac-436d9756d4fa
+          name: id
+          in: path
+          required: true
+          description: |
+            The ID of the permission to delete.
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Permissions
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Page:
+      name: page
+      description: Determines which page of a collection API to retrieve.
+      required: false
+      in: query
+      style: deepObject
+      schema:
+        $ref: '#/components/schemas/PageParameters'
+  schemas:
+    Error:
+      title: Error
+      description: Error schema.
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          required: true
+          enum: [ 400, 401, 403, 404, 409 ]
+          example: 404
+          description: The HTTP status code.
+        message:
+          type: string
+          required: true
+          description: Details about the error response.
+          example: Not Found.
+    PaginatedMeta:
+      type: object
+      title: PaginatedMeta
+      description: Returns pagination information
+      properties:
+        page:
+          type: object
+          additionalProperties: false
+          description: Contains pagination query parameters and the total number of objects returned.
+          properties:
+            number:
+              type: integer
+              required: true
+              example: 2
+              description: Specifies the number of objects returned per page.
+            size:
+              type: integer
+              required: true
+              example: 10
+              maximum: 100
+              description: Specifies the size of the page.
+            total:
+              type: integer
+              required: true
+              maximum: 1000
+              example: 100
+              description: Integer representation of the amount of items returned.
+    PageParameters:
+      title: 'PageParameters'
+      type: object
+      additionalProperties: false
+      properties:
+        size:
+          type: integer
+          description: The number of items included per page.
+          example: 10
+        number:
+          type: integer
+          description: The specific page number of the collection results.
+          example: 2
+    Permission:
+      title: Permission
+      description: Permission schema.
+      type: object
+      properties:
+        id:
+          type: string
+          required: true
+          format: uuid
+          description: ID of the permission.
+          readOnly: true
+        name:
+          type: string
+          required: true
+          description: Name of the permission.
+        description:
+          type: string
+          required: true
+          nullable: true
+          description: Description of the permission.
+        created_at:
+          type: string
+          required: true
+          format: date-time
+          example: '2022-11-04T20:10:06.927Z'
+          description: >-
+            An RFC-3339 timestamp representation of permission creation date.
+        updated_at:
+          type: string
+          required: true
+          format: date-time
+          example: '2022-11-04T20:10:06.927Z'
+          description: >-
+            An RFC-3339 timestamp representation of permission last updated date.
+    CreatePermissionRequest:
+      title: 'CreatePermissionRequest'
+      description: Request schema for creating a permission.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          required: true
+          description: Name of the permission.
+        description:
+          type: string
+          required: true
+          nullable: true
+          description: Description of the permission.
+    PatchPermissionRequest:
+      title: 'PatchPermissionRequest'
+      description: Request schema for updating a permission.
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+          required: false
+          nullable: true
+          description: Description of the permission.
+    Role:
+      title: Role
+      description: Role schema.
+      type: object
+      properties:
+        id:
+          type: string
+          required: true
+          format: uuid
+          description: ID of the role.
+          readOnly: true
+        name:
+          type: string
+          required: true
+          description: Name of the role.
+        permissions:
+          type: array
+          required: true
+          items:
+            type: string
+        created_at:
+          type: string
+          required: true
+          format: date-time
+          example: '2022-11-04T20:10:06.927Z'
+          description: >-
+            An RFC-3339 timestamp representation of role creation date.
+        updated_at:
+          type: string
+          required: true
+          format: date-time
+          example: '2022-11-04T20:10:06.927Z'
+          description: >-
+            An RFC-3339 timestamp representation of role last updated date.
+    CreateRoleRequest:
+        title: 'CreateRoleRequest'
+        description: Request schema for creating a role.
+        type: object
+        additionalProperties: false
+        properties:
+            name:
+              type: string
+              required: true
+              description: Name of the role.
+    User:
+      title: User
+      description: User schema.
+      type: object
+      properties:
+        id:
+          type: string
+          required: true
+          format: uuid
+          description: ID of the user.
+          readOnly: true
+        email:
+          type: string
+          required: true
+          description: Email of the user.
+        roles:
+          type: array
+          required: true
+          items:
+            type: string
+        created_at:
+          type: string
+          required: true
+          format: date-time
+          example: '2022-11-04T20:10:06.927Z'
+          description: >-
+            An RFC-3339 timestamp representation of user creation date.
+        updated_at:
+          type: string
+          required: true
+          format: date-time
+          example: '2022-11-04T20:10:06.927Z'
+          description: >-
+            An RFC-3339 timestamp representation of user last updated date.
+    LoginUserRequest:
+      title: 'LoginUserRequest'
+      description: Request schema for logging in a user.
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          required: true
+          description: Email of the user.
+        password:
+          type: string
+          required: true
+          description: Password of the user.
+    CreateUserRequest:
+      title: 'CreateUserRequest'
+      description: Request schema for creating a user.
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          required: true
+          description: Email of the user.
+        password:
+          type: string
+          required: true
+          description: Password of the user
+    PatchUserRequest:
+      title: 'PatchUserRequest'
+      description: Request schema for patching updatable fields of a user.
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          description: Email of the user.
+        password:
+          type: string
+          description: Password of the user
+    AssignRolesRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        roles:
+          required: true
+          type: array
+          items:
+            type: string
+    PatchRoleRequest:
+      title: 'PatchRoleRequest'
+      description: Request schema for patching updatable fields of a role.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the role.
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthenticated:
+      description: Unauthenticated
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    LoginUserResponse:
+      description: Response format for user login.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+                required: true
+                description: JWT access token scoped to a user.
+              refresh_token:
+                type: string
+                required: true
+                description: JWT refresh token scoped to a user.
+              token_type:
+                type: string
+                required: true
+                description: Type of JWT tokens in the response. This will always be "bearer".
+              expires_in_ms:
+                type: integer
+                required: true
+                description: The number of milliseconds until the access token expires.
+    AuthCheckResponse:
+      description: Response format for checking user permissions.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              authorized:
+                type: boolean
+                required: true
+                description: Indicates if the user has the specified permission.
+    GetUserResponse:
+      description: Response format for getting a user.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    ListUsersResponse:
+      description: A paginated list of users.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              meta:
+                $ref: '#/components/schemas/PaginatedMeta'
+    CreateUserResponse:
+      description: Response format for creating a user.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    PatchUserResponse:
+      description: Response format for updating a user.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    CreateRoleResponse:
+      description: Response format for creating a role.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Role'
+    GetRoleResponse:
+      description: Response format for getting a role.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Role'
+    ListRolesResponse:
+      description: A paginated list of Roles.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+              meta:
+                $ref: '#/components/schemas/PaginatedMeta'
+    PatchRoleResponse:
+      description: Response format for updating a role.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Role'
+    CreatePermissionResponse:
+      description: Response format for creating a permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Permission'
+    GetPermissionResponse:
+      description: Response format for getting a permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Permission'
+    PatchPermissionResponse:
+      description: Response format for updating a permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Permission'
+    ListPermissionsResponse:
+      description: A paginated list of permissions.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Permission'
+              meta:
+                $ref: '#/components/schemas/PaginatedMeta'
+
+
