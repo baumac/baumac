@@ -1,0 +1,48 @@
+version: "3.8"
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  traefik-letsencrypt:
+    driver: local
+
+services:
+  traefik:
+    image: "traefik:v3.5"
+    restart: always
+    container_name: "traefik"
+    networks:
+      - traefik-network
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # redirect all HTTP to HTTPS:
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      # Handle Lets Encrypt certificates:
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      # Use Lets Encrypt staging environment for testing:
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    ports:
+      - "80:80"
+      - "443:443"
+      # - "8080:8080" # Traefik admin dashboard
+    volumes:
+      # Add Docker as a mounted volume, so that Traefik can read the labels of other services (read-only)
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik-letsencrypt:/letsencrypt"
+
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
