@@ -22,7 +22,7 @@
       ]
     }
   ],
-  "ignorePaths": ["experiments/**"],
+  "ignorePaths": ["archive/**", "miscellaneous/**"],
   "automerge": true,
   "platformAutomerge": true,
   "rangeStrategy": "bump",

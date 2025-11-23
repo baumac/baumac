@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+    # Run watchtower to automatically update containers when a new image is pushed
+    watchtower:
+      image: containrrr/watchtower:1.4.0
+      restart: unless-stopped
+      environment:
+        WATCHTOWER_POLL_INTERVAL: 3600
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    # Run cloudflared to tunnel out of ISP's CGNAT and expose services to the open internet
+    tunnel: 
+      image: cloudflare/cloudflared
+      restart: unless-stopped
+      command: tunnel --no-autoupdate run
+      deploy:
+        labels:
+          com.centurylinklabs.watchtower.enable: "false"
+      environment:
+        - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    # Run the front end for icehotburn.dev
+    icehotburn.dev:
+      image: "ghcr.io/icehotburn/icehotburn-dev:main"
+      restart: unless-stopped
+
+
+
