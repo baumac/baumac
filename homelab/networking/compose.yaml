@@ -1,0 +1,34 @@
+services:
+  # todo add tailscale
+  caddy:
+    image: caddy:2.10.2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"  # HTTP/3
+    volumes:
+      - ./caddyfile:/etc/caddy/Caddyfile
+      - ./volumes/caddy_data:/data
+      - ./volumes/caddy_config:/config
+    networks:
+      - homelab_bridge
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health-check" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  homelab_bridge:
+    name: bridge
+    driver: bridge
+# todo determine if this is necessary
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: "172.20.0.0/16"
+#          ip_range: "172.20.0.0/16"
+#          gateway: "172.20.0.1"

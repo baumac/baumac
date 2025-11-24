@@ -1,0 +1,18 @@
+:8080 {
+    respond /health-check 200
+}
+
+localhost {
+    respond "hello world!"
+}
+
+observability.localhost {
+	request_body {
+		max_size 10MB
+	}
+	reverse_proxy beszel-hub:80 {
+		transport http {
+			read_timeout 360s
+		}
+	}
+}
