@@ -1,0 +1,61 @@
+services:
+  caddy:
+    image: caddy:2.10.2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"  # HTTP/3
+    volumes:
+      - ./caddyfile:/etc/caddy/Caddyfile
+      - ./volumes/caddy_data:/data
+      - ./volumes/caddy_config:/config
+    networks:
+      - apps
+      - proxy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health-check" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  cloudflared:
+    image: cloudflare/cloudflared:2025.11.1
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    networks:
+      - proxy
+    environment:
+      NO_AUTOUPDATE: true
+      TUNNEL_TOKEN_FILE: /run/secrets/cloudflared_tunnel_token
+    healthcheck:
+      test: [ "CMD", "cloudflared", "--version" ]
+      interval: 120s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    secrets:
+      - cloudflared_tunnel_token
+
+  whoami:
+    image: "traefik/whoami"
+    restart: unless-stopped
+    networks:
+      - apps
+    environment:
+      WHOAMI_PORT_NUMBER: 80
+
+networks:
+  apps:
+    name: apps
+    driver: bridge
+  proxy:
+    name: proxy
+    driver: bridge
+
+secrets:
+  cloudflared_tunnel_token:
+    file: cloudflared_tunnel_token.txt

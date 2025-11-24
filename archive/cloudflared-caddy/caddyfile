@@ -1,0 +1,19 @@
+:8080 {
+    respond /health-check 200
+}
+
+localhost {
+    respond "hello world!"
+}
+
+# Replace "whomai.localhost" with your domain
+whoami.localhost {
+	request_body {
+		max_size 10MB
+	}
+	reverse_proxy whoami:80 {
+		transport http {
+			read_timeout 360s
+		}
+	}
+}
