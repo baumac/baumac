@@ -6,6 +6,17 @@ localhost {
     respond "hello world!"
 }
 
+:80 {
+	request_body {
+		max_size 10MB
+	}
+	reverse_proxy beszel-hub:80 {
+		transport http {
+			read_timeout 360s
+		}
+	}
+}
+
 observability.localhost {
 	request_body {
 		max_size 10MB
