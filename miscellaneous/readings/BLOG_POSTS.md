@@ -14,3 +14,4 @@ Below are some of my favorite blog posts about software and engineering.
 9. [How to start Google](https://web.archive.org/web/20251011121634/https://paulgraham.com/google.html)
 10. [A Philosophy of Software Design vs Clean Code](https://web.archive.org/web/20251009050722/https://github.com/johnousterhout/aposd-vs-clean-code/blob/main/README.md)
 11. [How to ship](https://web.archive.org/web/20250923092846/https://www.seangoedecke.com/how-to-ship/)
+12. [Enshittification](https://web.archive.org/web/20251009034615/https://pluralistic.net/2023/01/21/potemkin-ai/#hey-guys)
