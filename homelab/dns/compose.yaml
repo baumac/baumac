@@ -15,7 +15,7 @@ services:
       TZ: 'Europe/Madrid'
       WEBPASSWORD: password
       DNSMASQ_LISTENING: local
-      PIHOLE_DNS_: '172.39.0.3#53'
+      PIHOLE_DNS_: '172.39.0.3#5053'
     # Volumes store your data between container upgrades
     volumes:
       - './volumes/pihole/pihole:/etc/pihole'
@@ -27,8 +27,8 @@ services:
     container_name: unbound
     image: klutchell/unbound:1.21.1
     ports:
-      - "53:53/tcp"
-      - "53:53/udp"
+      - "5053:53/tcp"
+      - "5053:53/udp"
     networks: 
      pihole_network:
        ipv4_address: 172.39.0.3
