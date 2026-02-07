@@ -1,0 +1,33 @@
+version: "3"
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:2025.11.1
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+      - "80:80/tcp"
+    network_mode: host
+    environment:
+      TZ: 'Europe/Madrid'
+      WEBPASSWORD: '${REPLACE_ME}'
+      DNSMASQ_LISTENING: local
+      PIHOLE_DNS_: '${REPLACE_ME}#5053'
+    # Volumes store your data between container upgrades
+    volumes:
+      - './volumes/pihole/pihole:/etc/pihole'
+      - './volumes/pihole/dnsmasq.d:/etc/dnsmasq.d'
+    cap_add:
+      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    restart: unless-stopped
+  unbound:
+    container_name: unbound
+    image: mvance/unbound:1.21.1
+    ports:
+      - "5053:53/tcp"
+      - "5053:53/udp"
+    network_mode: host
+    volumes:
+      - './volumes/unbound:/opt/unbound/etc/unbound/'
+    restart: unless-stopped
