@@ -29,23 +29,6 @@ services:
     restart: unless-stopped
   unbound:
     container_name: unbound
-    image: "mvance/unbound:latest"
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-    networks: 
-     ph_network:
-       ipv4_address: 192.168.1.199
-    volumes:
-      - '/volume3/docker/unbound:/opt/unbound/etc/unbound/'
-    restart: unless-stopped
-
-
-version: "3"
-# Instructions: https://www.wundertech.net/how-to-set-up-pi-hole-and-unbound-on-docker/
-services:
-  unbound:
-    container_name: unbound
     image: klutchell/unbound:1.21.1
     ports:
       - "53:53/tcp"
