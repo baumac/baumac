@@ -9,17 +9,13 @@ services:
       - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
       - "80:80/tcp"
     networks:
-     ph_network:
-       ipv4_address: 192.168.1.198
-       priority: 1000
-     ph_bridge:
-       ipv4_address: 192.168.100.2
-       priority: 900
+     pihole_network:
+       ipv4_address: 172.39.0.2
     environment:
       TZ: 'Europe/Madrid'
       WEBPASSWORD: password
       DNSMASQ_LISTENING: local
-      PIHOLE_DNS_: '192.168.1.199#53'
+      PIHOLE_DNS_: '172.39.0.3#53'
     # Volumes store your data between container upgrades
     volumes:
       - './volumes/pihole/pihole:/etc/pihole'
@@ -34,26 +30,14 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
     networks: 
-     ph_network:
-       ipv4_address: 192.168.1.199
+     pihole_network:
+       ipv4_address: 172.39.0.3
     volumes:
       - './volumes/unbound:/opt/unbound/etc/unbound/'
     restart: unless-stopped
 networks:
-    ph_bridge:
+    pihole_network:
       driver: bridge
       ipam:
         config:
-          - subnet: 192.168.100.0/24
-            gateway: 192.168.100.1
-            ip_range: 192.168.100.2/32
-    ph_network:
-      name: ph_network
-      driver: macvlan
-      driver_opts:
-        parent: ovs_eth0
-      ipam:
-        config:
-          - subnet: 192.168.1.0/24
-            ip_range: 192.168.1.0/24
-            gateway: 192.168.1.1
+          - subnet: 172.39.0.0/24
