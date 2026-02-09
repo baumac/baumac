@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
   unbound:
     container_name: unbound
-    image: klutchell/unbound:1.21.1
+    image: klutchell/unbound:1.24.2
     ports:
       - "5053:53/tcp"
       - "5053:53/udp"
