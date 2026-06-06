@@ -16,4 +16,5 @@ Below are some of my favorite blog posts about software and engineering.
 11. [How to ship](https://web.archive.org/web/20250923092846/https://www.seangoedecke.com/how-to-ship/)
 12. [Enshittification](https://web.archive.org/web/20251009034615/https://pluralistic.net/2023/01/21/potemkin-ai/#hey-guys)
 13. [AI And The Dead Economy Theory](https://web.archive.org/web/20260530134709/https://www.owenmcgrann.com/p/the-dead-economy-theory)
-14. [Programming As Theory Building](https://pages.cs.wisc.edu/~remzi/Naur.pdf)
+14. [Programming As Theory Building](https://web.archive.org/web/20260601211830/https://pages.cs.wisc.edu/~remzi/Naur.pdf)
+15. [How LLMS Actually Work](https://web.archive.org/web/20260606034952/https://www.0xkato.xyz/how-llms-actually-work/)
