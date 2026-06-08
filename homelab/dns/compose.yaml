@@ -2,7 +2,7 @@ version: "3"
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:2026.04.1
+    image: pihole/pihole:2026.05.0
     ports:
       - "53:53/tcp"
       - "53:53/udp"
@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
   unbound:
     container_name: unbound
-    image: klutchell/unbound:1.25.0
+    image: klutchell/unbound:1.25.1
     ports:
       - "5053:53/tcp"
       - "5053:53/udp"
